@@ -1,0 +1,27 @@
+[
+    {
+        "_id": "c101",
+        "vendor": "Subali",
+        "speed": 122
+    },
+    {
+        "_id": "c102",
+        "vendor": "Fiak",
+        "speed": 334
+    },
+    {
+        "_id": "c103",
+        "vendor": "Mitsu",
+        "speed": 190
+    },
+    {
+        "_id": "c104",
+        "vendor": "Audu",
+        "speed": 150
+    },
+    {
+        "_id": "c105",
+        "vendor": "Fiak",
+        "speed": 80
+    }
+]
