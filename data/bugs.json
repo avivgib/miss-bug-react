@@ -1,0 +1,50 @@
+[
+    {
+        "_id": "abc123",
+        "title": "UpdatedTitle",
+        "description": "UpdatedDesc",
+        "severity": 2
+    },
+    {
+        "_id": "def456",
+        "title": "Page not loading",
+        "description": "Homepage keeps spinning",
+        "severity": 2,
+        "createdAt": 1625147359454
+    },
+    {
+        "_id": "ghi789",
+        "title": "Error 500 on login",
+        "description": "Server crashes when submitting credentials",
+        "severity": 1,
+        "createdAt": 1656789359454
+    },
+    {
+        "_id": "jkl012",
+        "title": "Missing translations",
+        "description": "Some UI labels are still in English",
+        "severity": 4,
+        "createdAt": 1678901359454
+    },
+    {
+        "_id": "mno345",
+        "title": "Button not responding",
+        "description": "Submit button does not respond",
+        "severity": 2,
+        "createdAt": 1701233359454
+    },
+    {
+        "_id": "pqr678",
+        "title": "Database timeout",
+        "description": "Query execution takes too long",
+        "severity": 1,
+        "createdAt": 1724565359454
+    },
+    {
+        "_id": "stu901",
+        "title": "Broken image links",
+        "description": "Product images are not displaying",
+        "severity": 3,
+        "createdAt": 1747897359454
+    }
+]
