@@ -2,7 +2,7 @@ import express from 'express'
 import { bugService } from './services/bug.service.js'
 
 const app = express()
-app.use(express.static('public'))
+app.use(express.static('docs'))
 
 //* Read
 app.get('/api/bug', (req, res) => {
