@@ -2,7 +2,7 @@ import express from 'express'
 import { bugService } from './services/bug.service.js'
 
 const app = express()
-app.get('/', (req, res) => res.send('Hello There'))
+app.use(express.static('public'))
 
 //* Read
 app.get('/api/bug', (req, res) => {
@@ -47,5 +47,5 @@ app.get('/api/bug/:bugId/remove', (req, res) => {
 
 const port = 3030
 app.listen(port, () =>
-    console.log('Server ready at port 3030')
+    console.log(`Server ready at port ${port}`)
 )
