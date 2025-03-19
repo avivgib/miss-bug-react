@@ -1,9 +1,7 @@
 import express from 'express'
 import { bugService } from './services/bug.service.js'
-import cors from 'cors'
 
 const app = express()
-app.use(cors()) 
 app.use(express.static('docs'))
 
 //* Read
