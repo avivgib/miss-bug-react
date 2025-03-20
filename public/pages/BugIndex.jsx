@@ -7,7 +7,7 @@ import { BugFilter } from '../cmps/BugFilter.jsx'
 import { BugList } from '../cmps/BugList.jsx'
 
 export function BugIndex() {
-    const [bugs, setBugs] = useState(null)
+    const [bugs, setBugs] = useState([])
     const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
 
     useEffect(loadBugs, [filterBy])
@@ -15,7 +15,7 @@ export function BugIndex() {
     function loadBugs() {
         bugService.query(filterBy)
             .then(setBugs)
-            .catch(err => showErrorMsg(`Couldn't load bugs - ${err}`))
+            .catch(err => showErrorMsg(`Couldn't load bugs - ${err}  `))
     }
 
     function onRemoveBug(bugId) {
@@ -42,8 +42,15 @@ export function BugIndex() {
             .catch(err => showErrorMsg(`Cannot add bug`, err))
     }
 
+    function onDownloadBugs() {
+        bugService.downloadPdf()
+            .then(() => showSuccessMsg('PDF downloaded successfully'))
+            .catch(err => showErrorMsg(`Error downloading PDF - ${err.message}`))
+    }
+
     function onEditBug(bug) {
         const severity = +prompt('New severity?', bug.severity)
+
         const bugToSave = { ...bug, severity }
 
         bugService.save(bugToSave)
@@ -62,16 +69,19 @@ export function BugIndex() {
     }
 
     return <section className="bug-index main-content">
-        
+
         <BugFilter filterBy={filterBy} onSetFilterBy={onSetFilterBy} />
         <header>
             <h3>Bug List</h3>
-            <button onClick={onAddBug}>Add Bug</button>
+            <section className="btn-container">
+                <button onClick={onAddBug}>Add Bug</button>
+                <button onClick={onDownloadBugs}><i className="fa-solid fa-download"></i></button>
+            </section>
         </header>
-        
-        <BugList 
-            bugs={bugs} 
-            onRemoveBug={onRemoveBug} 
+
+        <BugList
+            bugs={bugs}
+            onRemoveBug={onRemoveBug}
             onEditBug={onEditBug} />
     </section>
 }

@@ -7,6 +7,11 @@ const app = express()
 app.use(express.static('public'))
 app.use(cookieParser())
 
+app.get('/api/bug/bugs-pdf', (req, res) => {
+    bugService.generateBugsPdf(res)
+    res.status(200).send(pdfBlob)
+})
+
 //* Read
 app.get('/api/bug', (req, res) => {
     bugService.query()

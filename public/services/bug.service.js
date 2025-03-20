@@ -1,5 +1,6 @@
 import { utilService } from "./util.service.js"
 import { storageService } from './async-storage.service.js'
+import { saveAs } from "file-saver"
 
 const BASE_URL = '/api/bug/'
 
@@ -8,7 +9,8 @@ export const bugService = {
     getById,
     remove,
     save,
-    getDefaultFilter
+    getDefaultFilter,
+    downloadPdf
 }
 
 function query(filterBy = {}) {
@@ -50,4 +52,15 @@ function save(bug) {
 
 function getDefaultFilter() {
     return { txt: '', minSeverity: 0 }
+}
+
+function downloadPdf() {
+    axios.get('http://localhost:3030/api/bug/bugs-pdf', { responseType: 'blob' })
+        .then(res => {
+            const blob = res.data // The data will arrive as a Blob
+            const url = URL.createObjectURL(blob) // Creates a temporary URL
+            window.open(url, '_blank') // Open in new tab (or start download)
+            setTimeout(() => URL.revokeObjectURL(url), 10000) // Releases memory after 10 seconds
+        })
+        .catch(err => showErrorMsg(`Error downloading PDF - ${err.message}`))
 }

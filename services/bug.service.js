@@ -1,11 +1,13 @@
 import fs from 'fs'
 import { utilService } from './util.service.js'
+import PDFDocument from 'pdfkit-table'
 
 export const bugService = {
     query,
     getById,
     save,
-    remove
+    remove,
+    generateBugsPdf
 }
 
 function query() {
@@ -59,4 +61,33 @@ function _saveBugsToFile(bugs) {
             return resolve()
         })
     })
+}
+
+function generateBugsPdf(res) {
+    query()
+        .then(bugs => {
+            const doc = new PDFDocument({ margin: 30, size: 'A4' })
+            
+            res.setHeader('Content-Type', 'application/pdf')
+            res.setHeader('Content-Disposition', 'attachment; filename=bugs_report.pdf')
+
+            doc.pipe(res)
+
+            const table = {
+                title: 'Bug Report',
+                headers: ['Title', 'Severity', 'Description'],
+                rows: bugs.map(bug => [bug.title, bug.severity, bug.description]),
+            }
+
+            doc.table(table, { columnsSize: [200, 100, 200] })
+                .then(() => doc.end())
+                .catch(err => {
+                    console.error('Error generating PDF:', err)
+                    res.status(500).send('Failed to generate PDF')
+                })
+        })
+        .catch(err => {
+            console.error('Error fetching bugs:', err)
+            res.status(500).send('Failed to fetch bugs')
+        })
 }
