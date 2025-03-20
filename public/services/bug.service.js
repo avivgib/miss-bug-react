@@ -5,7 +5,7 @@ const BASE_URL = '/api/bug/'
 
 export const bugService = {
     query,
-    get,
+    getById,
     remove,
     save,
     getDefaultFilter
@@ -26,7 +26,7 @@ function query(filterBy = {}) {
         })
 }
 
-function get(bugId) {
+function getById(bugId) {
     return axios.get(BASE_URL + bugId)
         .then(res => res.data)
 }

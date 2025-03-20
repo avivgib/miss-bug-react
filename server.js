@@ -1,9 +1,11 @@
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import { bugService } from './services/bug.service.js'
 import { loggerService } from './services/logger.service.js'
 
 const app = express()
 app.use(express.static('public'))
+app.use(cookieParser())
 
 //* Read
 app.get('/api/bug', (req, res) => {
@@ -14,7 +16,6 @@ app.get('/api/bug', (req, res) => {
         .catch(err => {
             loggerService.error('Cannot get bugs', err)
             res.status(500).send('Cannot load bugs')
-            // res.status(500).json({ error: err })
         })
 })
 
@@ -38,7 +39,21 @@ app.get('/api/bug/save', (req, res) => {
 
 //* Get Bug By Id
 app.get('/api/bug/:bugId', (req, res) => {
-    const { bugId } = req.params
+    const bugId = req.params.bugId
+
+    let visitedBugs = req.cookies.visitedBugs || []
+
+    if (!visitedBugs.includes(bugId)) {
+        visitedBugs.push(bugId)
+
+        if (visitedBugs.length > 3) {
+            return res.status(401).send('Wait for a bit')
+        }
+
+        res.cookie('visitedBugs', visitedBugs, { maxAge: 7000, httpOnly: true })
+        console.log('User visited the following bugs:', visitedBugs)
+    }
+
     bugService.getById(bugId)
         .then(bug => res.send(bug))
         .catch(err => {
