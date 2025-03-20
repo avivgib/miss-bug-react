@@ -1,8 +1,6 @@
 import fs from 'fs'
 import { utilService } from './util.service.js'
 
-const bugs = utilService.readJsonFile('data/bugs.json')
-
 export const bugService = {
     query,
     getById,
@@ -11,53 +9,46 @@ export const bugService = {
 }
 
 function query() {
-    return _loadBugs()
+    let bugs = utilService.readJsonFile('data/bugs.json')
+    
+    if (bugs.length === 0) {
+        console.log('Bugs list is empty, restoring from backup...')
+        bugs = utilService.readJsonFile('data/bugs-backup.json')
+        _saveBugsToFile(bugs)
+    }
+
+    return Promise.resolve(bugs)
 }
 
 function getById(bugId) {
-    return _loadBugs()
-        .then(bugs => {
-            const bug = bugs.find(bug => bug._id === bugId)
-            if (!bug) return Promise.reject(`Cannot find bug - ${bugId}`)
-            return bug
-        })
+    const bugs = utilService.readJsonFile('data/bugs.json')
+
+    const bug = bugs.find(bug => bug._id === bugId)
+    if (!bug) return Promise.reject(`Cannot find bug - ${bugId}`)
+    return Promise.resolve(bug)
 }
 
 function save(bugToSave) {
-    return _loadBugs()
-        .then(bugs => {
-            if (bugToSave._id) {
-                const bugIdx = bugs.findIndex(bug => bug._id === bugToSave._id)
-                if (bugIdx !== -1) {
-                    bugs[bugIdx] = bugToSave
-                }
-            } else {
-                bugToSave._id = utilService.makeId()
-                bugToSave.createdAt = Date.now()
-                bugs.unshift(bugToSave)
-            }
+    const bugs = utilService.readJsonFile('data/bugs.json')
 
-            return _saveBugsToFile(bugs).then(() => bugToSave)
-        })
+    if (bugToSave._id) {
+        const bugIdx = bugs.findIndex(bug => bug._id === bugToSave._id)
+        bugs[bugIdx] = bugToSave
+    } else {
+        bugToSave._id = utilService.makeId()
+        bugs.unshift(bugToSave)
+    }
+
+    return _saveBugsToFile(bugs).then(() => bugToSave)
 }
 
 function remove(bugId) {
-    return _loadBugs()
-        .then(bugs => {
-            const bugIdx = bugs.findIndex(bug => bug._id === bugId)
-            if (bugIdx === -1) return Promise.reject(`Cannot find bug - ${bugId}`)
-            bugs.splice(bugIdx, 1)
-            return _saveBugsToFile(bugs)
-        })
-}
-
-
-function _loadBugs() {
-    const bugs = utilService.readJsonFile('data/bugs.json')
-    if (!bugs || bugs.length === 0) { 
-        return Promise.reject('Failed to load bugs') 
-    }
-    return Promise.resolve(bugs)
+    let bugs = utilService.readJsonFile('data/bugs.json')
+    const bugIdx = bugs.findIndex(bug => bug._id === bugId)
+    if (bugIdx === -1) return Promise.reject(`Cannot find bug - ${bugId}`)
+    bugs.splice(bugIdx, 1)
+    
+    return _saveBugsToFile(bugs)
 }
 
 function _saveBugsToFile(bugs) {

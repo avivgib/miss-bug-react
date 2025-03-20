@@ -1,9 +1,10 @@
 [
     {
         "_id": "abc123",
-        "title": "UpdatedTitle",
-        "description": "UpdatedDesc",
-        "severity": 2
+        "title": "Cannot save a new car",
+        "description": "Problem when clicking Save",
+        "severity": 3,
+        "createdAt": 1542107359454
     },
     {
         "_id": "def456",

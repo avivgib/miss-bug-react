@@ -3,3 +3,6 @@ node_modules/
 
 # IDE files
 .vscode/
+
+# logs files
+logs/
