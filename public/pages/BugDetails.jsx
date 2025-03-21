@@ -28,7 +28,7 @@ export function BugDetails() {
             <div>
                 <h4>{bug.title}</h4>
                 <h5>Severity: <span>{bug.severity}</span></h5>
-                <p>Description: <span>{bug.description || utilService.makeLorem(20)}</span></p>
+                <p>Description: <span>{bug.description}</span></p>
             </div>
         }
         <hr />

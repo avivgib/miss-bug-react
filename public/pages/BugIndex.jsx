@@ -75,7 +75,9 @@ export function BugIndex() {
             <h3>Bug List</h3>
             <section className="btn-container">
                 <button onClick={onAddBug}>Add Bug</button>
-                <button onClick={onDownloadBugs}><i className="fa-solid fa-download"></i></button>
+                <button onClick={() => onDownloadBugs()}>
+                    <i className="fa-solid fa-download"></i>
+                </button>
             </section>
         </header>
 

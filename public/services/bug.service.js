@@ -1,6 +1,6 @@
 import { utilService } from "./util.service.js"
 import { storageService } from './async-storage.service.js'
-import { saveAs } from "file-saver"
+import { showErrorMsg } from "./event-bus.service.js"
 
 const BASE_URL = '/api/bug/'
 
@@ -54,8 +54,9 @@ function getDefaultFilter() {
     return { txt: '', minSeverity: 0 }
 }
 
+// Open PDF in a new Tab
 function downloadPdf() {
-    axios.get('http://localhost:3030/api/bug/bugs-pdf', { responseType: 'blob' })
+    axios.get(`${BASE_URL}bugs-pdf`, { responseType: 'blob' })
         .then(res => {
             const blob = res.data // The data will arrive as a Blob
             const url = URL.createObjectURL(blob) // Creates a temporary URL
@@ -64,3 +65,20 @@ function downloadPdf() {
         })
         .catch(err => showErrorMsg(`Error downloading PDF - ${err.message}`))
 }
+
+// Downloaded Direct
+// function downloadPdf() {
+//     axios.get(`${BASE_URL}bugs-pdf`, {responseType: 'blob'})
+//         .then(res => {
+//             const blob = res.data
+//             const url = URL.createObjectURL(blob)
+
+//             const a = document.createElement('a')
+//             a.href = url
+//             a.download = 'bugs-report.pdf'
+//             a.click()
+
+//             setTimeout(() => {() => URL.revokeObjectURL(url)}, 10 * 1000)
+//         })
+//         .catch(err => showErrorMsg(`Error downloading PDF - ${err}`))
+// }

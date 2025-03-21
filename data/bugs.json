@@ -1,5 +1,33 @@
 [
     {
+        "_id": "Ikajn",
+        "title": "Bug 1742568162381",
+        "description": "undefined",
+        "severity": 3,
+        "createdAt": 1742568164681
+    },
+    {
+        "_id": "RnRMZ",
+        "title": "Bug 1742510241632",
+        "description": "undefined",
+        "severity": 3,
+        "createdAt": 1742510243936
+    },
+    {
+        "_id": "dTrr5",
+        "title": "Bug 1742509804756",
+        "description": "undefined",
+        "severity": 3,
+        "createdAt": 1742509806225
+    },
+    {
+        "_id": "0infi",
+        "title": "New Bug Title",
+        "description": "undefined",
+        "severity": 5,
+        "createdAt": 1742508899632
+    },
+    {
         "_id": "abc123",
         "title": "Cannot save a new car",
         "description": "Problem when clicking Save",
