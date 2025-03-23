@@ -1,5 +1,3 @@
-import { utilService } from "./util.service.js"
-import { storageService } from './async-storage.service.js'
 import { showErrorMsg } from "./event-bus.service.js"
 
 const BASE_URL = '/api/bug/'
@@ -39,8 +37,8 @@ function remove(bugId) {
 }
 
 function save(bug) {
-    const url = BASE_URL + 'save'
-    let queryParams = `?title=${bug.title}&description=${bug.description}&severity=${bug.severity}`
+    const url = BASE_URL + 'save?'
+    let queryParams = `title=${bug.title}&description=${bug.description}&severity=${bug.severity}`
 
     if (bug._id) queryParams += `&_id=${bug._id}`
     return axios.get(url + queryParams)
@@ -56,17 +54,24 @@ function getDefaultFilter() {
 
 // Open PDF in a new Tab
 function downloadPdf() {
-    axios.get(`${BASE_URL}bugs-pdf`, { responseType: 'blob' })
+    return axios.get(`${BASE_URL}bugs-pdf`, { responseType: 'blob' })
         .then(res => {
-            const blob = res.data // The data will arrive as a Blob
-            const url = URL.createObjectURL(blob) // Creates a temporary URL
-            window.open(url, '_blank') // Open in new tab (or start download)
-            setTimeout(() => URL.revokeObjectURL(url), 10000) // Releases memory after 10 seconds
+            const blob = res.data                               // The data will arrive as a Blob
+
+            // blob.arrayBuffer()
+            //     .then(buffer => {
+            //         const uint8View = new Uint8Array(buffer)
+            //         console.log(`Binary data sample: ${uint8View}`)
+            //     })
+
+            const url = URL.createObjectURL(blob)               // Creates a temporary URL
+            window.open(url, '_blank')                          // Open in new tab (or start download)
+            setTimeout(() => URL.revokeObjectURL(url), 10000)   // Releases memory after 10 seconds
         })
         .catch(err => showErrorMsg(`Error downloading PDF - ${err.message}`))
 }
 
-// Downloaded Direct
+// // Downloaded Direct
 // function downloadPdf() {
 //     axios.get(`${BASE_URL}bugs-pdf`, {responseType: 'blob'})
 //         .then(res => {

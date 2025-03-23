@@ -3,7 +3,6 @@ const { Link, useParams } = ReactRouterDOM
 
 import { bugService } from "../services/bug.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
-import { utilService } from "../services/util.service.js"
 
 export function BugDetails() {
     const [bug, setBug] = useState(null)
@@ -34,5 +33,4 @@ export function BugDetails() {
         <hr />
         <Link to="/bug">Back to List</Link>
     </div>
-
 }

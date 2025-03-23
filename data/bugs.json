@@ -1,26 +1,5 @@
 [
     {
-        "_id": "Ikajn",
-        "title": "Bug 1742568162381",
-        "description": "undefined",
-        "severity": 3,
-        "createdAt": 1742568164681
-    },
-    {
-        "_id": "RnRMZ",
-        "title": "Bug 1742510241632",
-        "description": "undefined",
-        "severity": 3,
-        "createdAt": 1742510243936
-    },
-    {
-        "_id": "dTrr5",
-        "title": "Bug 1742509804756",
-        "description": "undefined",
-        "severity": 3,
-        "createdAt": 1742509806225
-    },
-    {
         "_id": "0infi",
         "title": "New Bug Title",
         "description": "undefined",
@@ -68,12 +47,5 @@
         "description": "Query execution takes too long",
         "severity": 1,
         "createdAt": 1724565359454
-    },
-    {
-        "_id": "stu901",
-        "title": "Broken image links",
-        "description": "Product images are not displaying",
-        "severity": 3,
-        "createdAt": 1747897359454
     }
 ]
