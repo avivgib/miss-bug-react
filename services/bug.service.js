@@ -10,13 +10,29 @@ export const bugService = {
     generateBugsPdf
 }
 
-function query() {
+function query(filterBy = {}) {
     let bugs = utilService.readJsonFile('data/bugs.json')
-    
+
+    // console.log('Filtering with:', filterBy)
+
     if (bugs.length === 0) {
         console.log('Bugs list is empty, restoring from backup...')
         bugs = utilService.readJsonFile('data/bugs-backup.json')
         _saveBugsToFile(bugs)
+    }
+
+    console.log('filterBy server query:', filterBy)
+    if (filterBy.txt) {
+        const regExp = new RegExp(filterBy.txt, 'i')
+        bugs = bugs.filter(bug => regExp.test(bug.title))
+    }
+
+    if (filterBy.minSeverity) {
+        bugs = bugs.filter(bug => bug.severity >= filterBy.minSeverity)
+    }
+
+    if(filterBy.labels && filterBy.labels.length > 0) {
+        bugs = bugs.filter(bug => bug.labels && bug.labels.some(label => filterBy.labels.includes(label)))
     }
 
     return Promise.resolve(bugs)
@@ -35,9 +51,10 @@ function save(bugToSave) {
 
     if (bugToSave._id) {
         const bugIdx = bugs.findIndex(bug => bug._id === bugToSave._id)
-        bugs[bugIdx] = bugToSave
+        bugs[bugIdx] = { _id: bugToSave._id, ...bugToSave}
     } else {
         bugToSave._id = utilService.makeId()
+        bugToSave = { _id: bugToSave._id, ...bugToSave }
         bugs.unshift(bugToSave)
     }
 
@@ -49,7 +66,7 @@ function remove(bugId) {
     const bugIdx = bugs.findIndex(bug => bug._id === bugId)
     if (bugIdx === -1) return Promise.reject(`Cannot find bug - ${bugId}`)
     bugs.splice(bugIdx, 1)
-    
+
     return _saveBugsToFile(bugs)
 }
 
@@ -67,7 +84,7 @@ function generateBugsPdf(res) {
     query()
         .then(bugs => {
             const doc = new PDFDocument({ margin: 30, size: 'A4' })
-            
+
             res.setHeader('Content-Type', 'application/pdf')
             res.setHeader('Content-Disposition', 'attachment; filename=bugs_report.pdf')
 
