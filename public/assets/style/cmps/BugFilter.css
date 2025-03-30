@@ -11,3 +11,29 @@
     margin-inline-start: 1em;
 }
 
+label.tag {
+    padding: 0.3em 0.6em;
+    border-radius: 0.3em;
+    margin: 4px;
+    font-size: 0.9em;
+    cursor: pointer;
+    background-color: var(--color1);
+    display: inline-block;
+  }
+  
+  label.tag:has(input:checked) {
+    background-color: var(--bg1);
+    color: white;
+  }
+  
+  label.tag > input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  label.tag:has(input:focus-visible) {
+    outline: 2px solid var(--bg2);
+    outline-offset: 2px;
+  }
+  
