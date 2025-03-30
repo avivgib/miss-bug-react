@@ -8,22 +8,15 @@ export const bugService = {
     remove,
     save,
     getDefaultFilter,
+    getLabels,
     downloadPdf
 }
 
 function query(filterBy = {}) {
-    return axios.get(BASE_URL)
+    console.log('filter query:', filterBy)
+
+    return axios.get(BASE_URL, { params: filterBy })
         .then(res => res.data)
-        .then(bugs => {
-            if (filterBy.txt) {
-                const regExp = new RegExp(filterBy.txt, 'i')
-                bugs = bugs.filter(bug => regExp.test(bug.title))
-            }
-            if (filterBy.minSeverity) {
-                bugs = bugs.filter(bug => bug.severity >= filterBy.minSeverity)
-            }
-            return bugs
-        })
 }
 
 function getById(bugId) {
@@ -32,36 +25,51 @@ function getById(bugId) {
 }
 
 function remove(bugId) {
-    return axios.get(BASE_URL + bugId + '/remove')
+    return axios.delete(BASE_URL + bugId)
         .then(res => res.data)
 }
 
 function save(bug) {
-    const url = BASE_URL + 'save?'
-    let queryParams = `title=${bug.title}&description=${bug.description}&severity=${bug.severity}`
+    bug.labels = _processLabels(bug.labels)
+    const url = BASE_URL
 
-    if (bug._id) queryParams += `&_id=${bug._id}`
-    return axios.get(url + queryParams)
-        .then(res => res.data)
-        .catch(err => {
-            console.log('err:', err)
-        })
+    if (bug._id) {
+        return axios.put(url + bug._id, bug)
+            .then(res => res.data)
+            .catch(err => {
+                console.log('err:', err)
+                throw err
+            })
+    } else {
+        return axios.post(url, bug)
+            .then(res => res.data)
+            .catch(err => {
+                console.log('err:', err)
+                throw err
+            })
+    }
 }
 
 function getDefaultFilter() {
-    return { txt: '', minSeverity: 0 }
+    return { txt: '', minSeverity: 0, labels: [], sortField: '', sortDir: 1 }
+}
+
+function getLabels() {
+    return ['UI', 'Database', 'Optimization', 'Critical', 'Backend', 'Performance', 'Bug', 'Interaction']
 }
 
 // Open PDF in a new Tab
 function downloadPdf() {
     return axios.get(`${BASE_URL}bugs-pdf`, { responseType: 'blob' })
         .then(res => {
-            const blob = res.data                               // The data will arrive as a Blob
+            const blob = res.data
+            console.log('blob', blob)                             // The data will arrive as a Blob
 
             // blob.arrayBuffer()
             //     .then(buffer => {
+            //         console.log('buffer', buffer)
             //         const uint8View = new Uint8Array(buffer)
-            //         console.log(`Binary data sample: ${uint8View}`)
+            //         console.log(`Binary data sample: ${uint8View.slice(0, 20)}`)
             //     })
 
             const url = URL.createObjectURL(blob)               // Creates a temporary URL
@@ -71,19 +79,8 @@ function downloadPdf() {
         .catch(err => showErrorMsg(`Error downloading PDF - ${err.message}`))
 }
 
-// // Downloaded Direct
-// function downloadPdf() {
-//     axios.get(`${BASE_URL}bugs-pdf`, {responseType: 'blob'})
-//         .then(res => {
-//             const blob = res.data
-//             const url = URL.createObjectURL(blob)
-
-//             const a = document.createElement('a')
-//             a.href = url
-//             a.download = 'bugs-report.pdf'
-//             a.click()
-
-//             setTimeout(() => {() => URL.revokeObjectURL(url)}, 10 * 1000)
-//         })
-//         .catch(err => showErrorMsg(`Error downloading PDF - ${err}`))
-// }
+function _processLabels(labels) {
+    return labels
+        .map(label => label.trim())
+        .map(label => label.toUpperCase() === 'UI' ? 'UI' : label.charAt(0).toUpperCase() + label.slice(1).toLowerCase()) 
+}
