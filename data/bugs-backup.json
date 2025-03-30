@@ -3,49 +3,56 @@
         "_id": "abc123",
         "title": "Cannot save a new car",
         "description": "Problem when clicking Save",
-        "severity": 3,
-        "createdAt": 1542107359454
+        "severity": 1,
+        "createdAt": 1542107359454,
+        "labels": ["Backend", "Critical"]
     },
     {
         "_id": "def456",
         "title": "Page not loading",
         "description": "Homepage keeps spinning",
         "severity": 2,
-        "createdAt": 1625147359454
+        "createdAt": 1625147359454,
+        "labels": ["UI", "Performance"]
     },
     {
         "_id": "ghi789",
         "title": "Error 500 on login",
         "description": "Server crashes when submitting credentials",
         "severity": 1,
-        "createdAt": 1656789359454
+        "createdAt": 1656789359454,
+        "labels": ["Backend", "Critical"]
     },
     {
         "_id": "jkl012",
         "title": "Missing translations",
         "description": "Some UI labels are still in English",
         "severity": 4,
-        "createdAt": 1678901359454
+        "createdAt": 1678901359454,
+        "labels": ["UI"]
     },
     {
         "_id": "mno345",
         "title": "Button not responding",
         "description": "Submit button does not respond",
         "severity": 2,
-        "createdAt": 1701233359454
+        "createdAt": 1701233359454,
+        "labels": ["UI", "Interaction"]
     },
     {
         "_id": "pqr678",
         "title": "Database timeout",
         "description": "Query execution takes too long",
         "severity": 1,
-        "createdAt": 1724565359454
+        "createdAt": 1724565359454,
+        "labels": ["Database", "Optimization", "Critical"]
     },
     {
         "_id": "stu901",
         "title": "Broken image links",
         "description": "Product images are not displaying",
         "severity": 3,
-        "createdAt": 1747897359454
+        "createdAt": 1747897359454,
+        "labels": ["UI", "Bug"]
     }
 ]
