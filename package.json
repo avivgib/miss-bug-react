@@ -14,7 +14,6 @@
   "dependencies": {
     "cookie-parser": "^1.4.7",
     "express": "^4.21.2",
-    "gh-pages": "^6.3.0",
     "pdfkit-table": "^0.1.99"
   }
 }
