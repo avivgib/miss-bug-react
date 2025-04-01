@@ -5,7 +5,8 @@
         "description": "Problem when clicking Save",
         "severity": 1,
         "createdAt": 1542107359454,
-        "labels": ["Backend", "Critical"]
+        "labels": ["Backend", "Critical"],
+        "creator": { "_id": "u101", "fullname": "Pako Ja" }
     },
     {
         "_id": "def456",
@@ -13,7 +14,8 @@
         "description": "Homepage keeps spinning",
         "severity": 2,
         "createdAt": 1625147359454,
-        "labels": ["UI", "Performance"]
+        "labels": ["UI", "Performance"],
+        "creator": { "_id": "u102", "fullname": "Loka Ma" }
     },
     {
         "_id": "ghi789",
@@ -21,7 +23,8 @@
         "description": "Server crashes when submitting credentials",
         "severity": 1,
         "createdAt": 1656789359454,
-        "labels": ["Backend", "Critical"]
+        "labels": ["Backend", "Critical"],
+        "creator": { "_id": "u103", "fullname": "Mike Rofon" }
     },
     {
         "_id": "jkl012",
@@ -29,7 +32,8 @@
         "description": "Some UI labels are still in English",
         "severity": 4,
         "createdAt": 1678901359454,
-        "labels": ["UI"]
+        "labels": ["UI"],
+        "creator": { "_id": "u104", "fullname": "Sara Lee" }
     },
     {
         "_id": "mno345",
@@ -37,7 +41,8 @@
         "description": "Submit button does not respond",
         "severity": 2,
         "createdAt": 1701233359454,
-        "labels": ["UI", "Interaction"]
+        "labels": ["UI", "Interaction"],
+        "creator": { "_id": "u105", "fullname": "John Smith" }
     },
     {
         "_id": "pqr678",
@@ -45,7 +50,8 @@
         "description": "Query execution takes too long",
         "severity": 1,
         "createdAt": 1724565359454,
-        "labels": ["Database", "Optimization", "Critical"]
+        "labels": ["Database", "Optimization", "Critical"],
+        "creator": { "_id": "u106", "fullname": "Alex Brown" }
     },
     {
         "_id": "stu901",
@@ -53,6 +59,25 @@
         "description": "Product images are not displaying",
         "severity": 3,
         "createdAt": 1747897359454,
-        "labels": ["UI", "Bug"]
+        "labels": ["UI", "Bug"],
+        "creator": { "_id": "u107", "fullname": "Emily White" }
+    },
+    {
+        "_id": "vwx234",
+        "title": "API response delay",
+        "description": "API is taking too long to respond",
+        "severity": 2,
+        "createdAt": 1765009359454,
+        "labels": ["Backend", "Performance"],
+        "creator": { "_id": "u108", "fullname": "David Green" }
+    },
+    {
+        "_id": "yzx567",
+        "title": "Slow page rendering",
+        "description": "The homepage takes too long to load",
+        "severity": 3,
+        "createdAt": 1788901359454,
+        "labels": ["UI", "Performance"],
+        "creator": { "_id": "u109", "fullname": "Jessica Black" }
     }
 ]
