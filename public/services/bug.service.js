@@ -12,11 +12,26 @@ export const bugService = {
     downloadPdf
 }
 
-function query(filterBy = {}) {
-    console.log('filter query:', filterBy)
+function query(options) {
+    const { filterBy, sortBy, pagination } = options
 
-    return axios.get(BASE_URL, { params: filterBy })
-        .then(res => res.data)
+    const queryParams = {
+        txt: filterBy.txt || '',
+        minSeverity: filterBy.minSeverity || 0,
+        labels: filterBy.labels ? filterBy.labels.join(',') : '',
+        sortField: sortBy.sortField || '',
+        sortDir: sortBy.sortDir || 1,
+        pageIdx: pagination.pageIdx || 0,
+        pageSize: pagination.pageSize || 3
+    }
+
+    // console.log('Client - Query Params:', queryParams)
+
+    return axios.get('/api/bug', { params: queryParams })
+        .then(res => {
+            console.log('Server Response:', res.data)
+            return res.data
+        })
 }
 
 function getById(bugId) {
@@ -82,5 +97,5 @@ function downloadPdf() {
 function _processLabels(labels) {
     return labels
         .map(label => label.trim())
-        .map(label => label.toUpperCase() === 'UI' ? 'UI' : label.charAt(0).toUpperCase() + label.slice(1).toLowerCase()) 
+        .map(label => label.toUpperCase() === 'UI' ? 'UI' : label.charAt(0).toUpperCase() + label.slice(1).toLowerCase())
 }

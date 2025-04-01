@@ -1,4 +1,4 @@
-const { useState, useEffect } = React
+const { useState, useEffect, useMemo } = React
 
 import { bugService } from '../services/bug.service.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
@@ -8,14 +8,24 @@ import { utilService } from '../services/util.service.js'
 
 export function BugIndex() {
     const [bugs, setBugs] = useState([])
+    const [totalBugs, setTotalBugs] = useState(0)
     const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
+    const [sortBy, setSortBy] = useState({ sortField: 'title', sortDir: 1 })
+    const [pagination, setPagination] = useState({ pageIdx: 0, pageSize: 4 })
 
-    useEffect(loadBugs, [filterBy])
+    useEffect(loadBugs, [filterBy, sortBy, pagination])
 
     function loadBugs() {
-        bugService.query(filterBy)
-            .then(setBugs)
-            .catch(err => showErrorMsg(`Couldn't load bugs - ${err}  `))
+        const queryOptions = { filterBy, sortBy, pagination }
+        console.log('Query Options:', queryOptions)
+
+        bugService.query(queryOptions)
+            .then(({bugs, total}) => {
+                console.log('Full Response:', bugs) 
+                setBugs(bugs)
+                setTotalBugs(total)
+            })
+            .catch(err => showErrorMsg(`Couldn't load bugs - ${err}`))
     }
 
     function onRemoveBug(bugId) {
@@ -33,7 +43,7 @@ export function BugIndex() {
         const description = prompt("Enter bug description:", utilService.makeLorem(10))
         const severity = prompt("Enter bug severity (1-5):", 3)
         const labels = prompt("Enter labels (comma separated):", 'UI, Database').split(',')
-        
+
         const newBug = {
             title,
             description,
@@ -71,6 +81,23 @@ export function BugIndex() {
         setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
     }
 
+    function onSetSort(sortField) {
+        setSortBy(prev => ({
+            sortField,
+            sortDir: prev.sortField === sortField ? prev.sortDir * -1 : 1
+        }))
+    }
+
+    function nextPage() {
+        if ((pagination.pageIdx + 1) * pagination.pageSize < totalBugs) {
+            setPagination(prev => ({ ...prev, pageIdx: prev.pageIdx + 1 }))
+        }
+    }
+
+    function prevPage() {
+        setPagination(prev => ({ ...prev, pageIdx: Math.max(prev.pageIdx - 1, 0) }))
+    }
+
     return <section className="bug-index main-content">
 
         <BugFilter filterBy={filterBy} onSetFilterBy={onSetFilterBy} />
@@ -88,12 +115,38 @@ export function BugIndex() {
                 <button onClick={onDownloadBugs}>
                     <i className="fa-solid fa-download"></i>
                 </button>
+
+                <button onClick={() => onSetSort("severity")}>
+                    <i className={`fa-solid ${sortBy.sortField === "severity"
+                        ? (sortBy.sortDir !== 1
+                            ? "fa-arrow-up-1-9"
+                            : "fa-arrow-down-1-9")
+                        : "fa-arrow-up-1-9"}`}></i>
+                </button>
+
+                <button onClick={() => onSetSort("title")}>
+                    <i className={`fa-solid ${sortBy.sortField === "title"
+                        ? (sortBy.sortDir !== 1
+                            ? "fa-arrow-up-a-z"
+                            : "fa-arrow-down-a-z")
+                        : "fa-arrow-up-a-z"}`}></i>
+                </button>
+
+
             </section>
         </header>
 
         <BugList
             bugs={bugs}
             onRemoveBug={onRemoveBug}
-            onEditBug={onEditBug} />
+            onEditBug={onEditBug}
+            sortBy={sortBy}
+        />
+
+        <section className="btn-pagination">
+            <button onClick={prevPage} disabled={pagination.pageIdx === 0}>Prev</button>
+            <button onClick={nextPage} disabled={(pagination.pageIdx + 1) * pagination.pageSize >= totalBugs}>Next</button>
+        </section>
+
     </section>
 }
