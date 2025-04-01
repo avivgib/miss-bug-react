@@ -1,35 +1,11 @@
 [
     {
-        "_id": "G5mmO",
-        "title": "sadasdasdasdasd",
-        "description": "asd asdas asd asd asd asd as d",
-        "severity": 2,
-        "labels": [
-            "UI",
-            "Backend",
-            "Critical"
-        ]
-    },
-    {
-        "_id": "sg33I",
-        "title": "Test Bug",
-        "description": "New Bug to Test",
-        "severity": 5,
-        "labels": [
-            "UI",
-            " critical"
-        ]
-    },
-    {
         "_id": "abc123",
         "title": "Cannot save a new car",
         "description": "Problem when clicking Save",
         "severity": 1,
         "createdAt": 1542107359454,
-        "labels": [
-            "Backend",
-            "Critical"
-        ]
+        "labels": ["Backend", "Critical"]
     },
     {
         "_id": "def456",
@@ -37,10 +13,7 @@
         "description": "Homepage keeps spinning",
         "severity": 2,
         "createdAt": 1625147359454,
-        "labels": [
-            "UI",
-            "Performance"
-        ]
+        "labels": ["UI", "Performance"]
     },
     {
         "_id": "ghi789",
@@ -48,20 +21,15 @@
         "description": "Server crashes when submitting credentials",
         "severity": 1,
         "createdAt": 1656789359454,
-        "labels": [
-            "Backend",
-            "Critical"
-        ]
+        "labels": ["Backend", "Critical"]
     },
     {
         "_id": "jkl012",
         "title": "Missing translations",
         "description": "Some UI labels are still in English",
-        "severity": 0,
+        "severity": 4,
         "createdAt": 1678901359454,
-        "labels": [
-            "UI"
-        ]
+        "labels": ["UI"]
     },
     {
         "_id": "mno345",
@@ -69,10 +37,7 @@
         "description": "Submit button does not respond",
         "severity": 2,
         "createdAt": 1701233359454,
-        "labels": [
-            "UI",
-            "Interaction"
-        ]
+        "labels": ["UI", "Interaction"]
     },
     {
         "_id": "pqr678",
@@ -80,10 +45,14 @@
         "description": "Query execution takes too long",
         "severity": 1,
         "createdAt": 1724565359454,
-        "labels": [
-            "Database",
-            "Optimization",
-            "Critical"
-        ]
+        "labels": ["Database", "Optimization", "Critical"]
+    },
+    {
+        "_id": "stu901",
+        "title": "Broken image links",
+        "description": "Product images are not displaying",
+        "severity": 3,
+        "createdAt": 1747897359454,
+        "labels": ["UI", "Bug"]
     }
 ]

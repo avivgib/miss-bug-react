@@ -19,40 +19,16 @@ app.get('/api/bug/bugs-pdf', (req, res) => {
 
 // Fetch all bugs
 app.get('/api/bug', (req, res) => {
-    const queryOptions = parseQueryParams(req.query)
-    // console.log('Parsed query options:', queryOptions)
-    const { filterBy } = queryOptions
-
-    bugService.query(filterBy)
-        .then(bugs => {
-            loggerService.info('Fetched all bugs')
-            res.status(200).send(bugs)
+    bugService.query(req.query)
+        .then(({bugs, total}) => {
+            loggerService.info(`Fetched ${bugs.length} bugs, total: ${total}`)
+            res.status(200).send({ bugs, total })
         })
         .catch(err => {
             loggerService.error('Failed to fetch bugs', err)
             res.status(500).send('Failed to fetch bugs')
         })
 })
-
-function parseQueryParams(queryParams) {
-    const filterBy = {
-        txt: queryParams.txt || '',
-        minSeverity: +queryParams.minSeverity || 0,
-        labels: Array.isArray(queryParams.labels) ? queryParams.labels : queryParams.labels ? [queryParams.labels] : []
-    }
-
-    const sortBy = {
-        sortField: queryParams.sortField || 'title',
-        sortDir: +queryParams.sortDir || 1,
-    }
-
-    const pagination = {
-        pageIdx: queryParams.pageIdx !== undefined ? +queryParams.pageIdx : 0,
-        pageSize: +queryParams.pageSize || 3,
-    }
-
-    return { filterBy, sortBy, pagination }
-}
 
 // Create New Bug
 app.post('/api/bug', (req, res) => {

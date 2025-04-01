@@ -1,6 +1,6 @@
 import fs from 'fs'
-import { utilService } from './util.service.js'
 import PDFDocument from 'pdfkit-table'
+import { utilService } from './util.service.js'
 
 export const bugService = {
     query,
@@ -10,37 +10,43 @@ export const bugService = {
     generateBugsPdf
 }
 
-function query(filterBy = {}) {
-    let bugs = utilService.readJsonFile('data/bugs.json')
+let bugs = []
 
-    // console.log('Filtering with:', filterBy)
+function loadBugs() {
+    bugs = utilService.readJsonFile('data/bugs.json')
+}
 
-    if (bugs.length === 0) {
+function reloadBugs() {
+    bugs = utilService.readJsonFile('data/bugs.json')
+}
+
+loadBugs()
+
+
+function query(query) {
+    const queryOptions = _parseQueryParams(query)
+    let bugsToReturn = [...bugs]
+
+    // Load from backup
+    if (!bugsToReturn.length) {
         console.log('Bugs list is empty, restoring from backup...')
-        bugs = utilService.readJsonFile('data/bugs-backup.json')
-        _saveBugsToFile(bugs)
+        bugsToReturn = utilService.readJsonFile('data/bugs-backup.json')
+        _saveBugsToFile(bugsToReturn)
     }
 
-    console.log('filterBy server query:', filterBy)
-    if (filterBy.txt) {
-        const regExp = new RegExp(filterBy.txt, 'i')
-        bugs = bugs.filter(bug => regExp.test(bug.title))
-    }
+    // Filtering & sorting 
+    bugsToReturn = _applyFiltersAndSort(bugsToReturn, queryOptions.filterBy, queryOptions.sortBy)
 
-    if (filterBy.minSeverity) {
-        bugs = bugs.filter(bug => bug.severity >= filterBy.minSeverity)
-    }
+    // Pagination
+    const totalBugs = bugsToReturn.length
+    const { pageIdx, pageSize } = queryOptions.pagination
+    const startIdx = pageIdx * pageSize
+    bugsToReturn = bugsToReturn.slice(startIdx, startIdx + pageSize)
 
-    if(filterBy.labels && filterBy.labels.length > 0) {
-        bugs = bugs.filter(bug => bug.labels && bug.labels.some(label => filterBy.labels.includes(label)))
-    }
-
-    return Promise.resolve(bugs)
+    return Promise.resolve({ bugs: bugsToReturn, total: totalBugs })
 }
 
 function getById(bugId) {
-    const bugs = utilService.readJsonFile('data/bugs.json')
-
     const bug = bugs.find(bug => bug._id === bugId)
     if (!bug) return Promise.reject(`Cannot find bug - ${bugId}`)
     return Promise.resolve(bug)
@@ -51,7 +57,7 @@ function save(bugToSave) {
 
     if (bugToSave._id) {
         const bugIdx = bugs.findIndex(bug => bug._id === bugToSave._id)
-        bugs[bugIdx] = { _id: bugToSave._id, ...bugToSave}
+        bugs[bugIdx] = { _id: bugToSave._id, ...bugToSave }
     } else {
         bugToSave._id = utilService.makeId()
         bugToSave = { _id: bugToSave._id, ...bugToSave }
@@ -70,19 +76,9 @@ function remove(bugId) {
     return _saveBugsToFile(bugs)
 }
 
-function _saveBugsToFile(bugs) {
-    return new Promise((resolve, reject) => {
-        const data = JSON.stringify(bugs, null, 4)
-        fs.writeFile('data/bugs.json', data, (err) => {
-            if (err) return reject('Failed to save bugs to file')
-            return resolve()
-        })
-    })
-}
-
 function generateBugsPdf(res) {
-    query()
-        .then(bugs => {
+    query({ filterBy: {}, sortBy: {}, pagination: {} })
+        .then(({ bugs }) => {
             const doc = new PDFDocument({ margin: 30, size: 'A4' })
 
             res.setHeader('Content-Type', 'application/pdf')
@@ -107,4 +103,61 @@ function generateBugsPdf(res) {
             console.error('Error fetching bugs:', err)
             res.status(500).send('Failed to fetch bugs')
         })
+}
+
+function _saveBugsToFile(bugs) {
+    return new Promise((resolve, reject) => {
+        const data = JSON.stringify(bugs, null, 4)
+        fs.writeFile('data/bugs.json', data, (err) => {
+            if (err) return reject('Failed to save bugs to file')
+            return resolve()
+        })
+    })
+}
+
+function _applyFiltersAndSort(bugsToReturn, filterBy, sortBy) {
+    if (filterBy.txt) {
+        const regExp = new RegExp(filterBy.txt, 'i')
+        bugsToReturn = bugsToReturn.filter(bug => regExp.test(bug.title))
+    }
+
+    if (filterBy.minSeverity) {
+        bugsToReturn = bugsToReturn.filter(bug => bug.severity >= filterBy.minSeverity)
+    }
+
+    if (filterBy.labels.length) {
+        bugsToReturn = bugsToReturn.filter(bug =>
+            filterBy.labels.some(label => bug?.labels?.includes(label))
+        )
+    }
+
+    const { sortField, sortDir } = sortBy
+    bugsToReturn.sort((bug1, bug2) => {
+        if (sortField === 'title') {
+            return bug1.title.localeCompare(bug2.title) * sortDir
+        }
+        return (bug1[sortField] - bug2[sortField]) * sortDir
+    })
+
+    return bugsToReturn
+}
+
+function _parseQueryParams(queryParams) {
+    const filterBy = {
+        txt: queryParams.txt || '',
+        minSeverity: +queryParams.minSeverity || 0,
+        labels: queryParams.labels ? (Array.isArray(queryParams.labels) ? queryParams.labels : [queryParams.labels]) : []
+    }
+
+    const sortBy = {
+        sortField: queryParams.sortField || 'title',
+        sortDir: +queryParams.sortDir || 1,
+    }
+
+    const pagination = {
+        pageIdx: +queryParams.pageIdx || 0,
+        pageSize: +queryParams.pageSize || 10,
+    }
+
+    return { filterBy, sortBy, pagination }
 }
