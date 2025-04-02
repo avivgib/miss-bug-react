@@ -133,10 +133,12 @@ function _applyFiltersAndSort(bugsToReturn, filterBy, sortBy) {
 
     const { sortField, sortDir } = sortBy
     bugsToReturn.sort((bug1, bug2) => {
+        const title1 = bug1.title || ''
+        const title2 = bug2.title || ''
         if (sortField === 'title') {
-            return bug1.title.localeCompare(bug2.title) * sortDir
+            return title1.localeCompare(title2) * sortDir
         }
-        return (bug1[sortField] - bug2[sortField]) * sortDir
+        return ((bug1[sortField] || 0) - (bug2[sortField] || 0)) * sortDir
     })
 
     return bugsToReturn

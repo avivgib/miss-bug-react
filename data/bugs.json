@@ -55,14 +55,6 @@
         }
     },
     {
-        "_id": "fctxT",
-        "createdAt": 1743543734055,
-        "creator": {
-            "_id": "u102",
-            "fullname": "Loka Ma"
-        }
-    },
-    {
         "_id": "abc123",
         "title": "Cannot save a new car",
         "description": "Problem when clicking Save",
