@@ -1,10 +1,11 @@
-const { useState, useEffect, useMemo } = React
+const { useState, useEffect } = React
 
 import { bugService } from '../services/bug.service.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 import { BugFilter } from '../cmps/BugFilter.jsx'
 import { BugList } from '../cmps/BugList.jsx'
 import { utilService } from '../services/util.service.js'
+import { authService } from '../services/auth.service.js'
 
 export function BugIndex() {
     const [bugs, setBugs] = useState([])
@@ -12,16 +13,17 @@ export function BugIndex() {
     const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
     const [sortBy, setSortBy] = useState({ sortField: 'title', sortDir: 1 })
     const [pagination, setPagination] = useState({ pageIdx: 0, pageSize: 4 })
+    const [user, setUser] = useState(authService.getLoggedInUser())
 
-    useEffect(loadBugs, [filterBy, sortBy, pagination])
+    useEffect(loadBugs, [filterBy, sortBy, pagination, user])
 
     function loadBugs() {
-        const queryOptions = { filterBy, sortBy, pagination }
-        console.log('Query Options:', queryOptions)
+        const queryOptions = { filterBy, sortBy, pagination, userId: user ? user._id : null }
+        // console.log('Query Options:', queryOptions)
 
         bugService.query(queryOptions)
-            .then(({bugs, total}) => {
-                console.log('Full Response:', bugs) 
+            .then(({ bugs, total }) => {
+                console.log('Full Response:', bugs)
                 setBugs(bugs)
                 setTotalBugs(total)
             })
@@ -98,50 +100,35 @@ export function BugIndex() {
         setPagination(prev => ({ ...prev, pageIdx: Math.max(prev.pageIdx - 1, 0) }))
     }
 
+    function getSortIcon(field, sortBy) {
+        if (sortBy.sortField !== field) {
+            return field === "severity" ? "fa-arrow-up-1-9" : "fa-arrow-up-a-z"
+        }
+        return sortBy.sortDir === 1
+            ? (field === "severity" ? "fa-arrow-down-1-9" : "fa-arrow-down-a-z")
+            : (field === "severity" ? "fa-arrow-up-1-9" : "fa-arrow-up-a-z")
+    }
+    
     return <section className="bug-index main-content">
-
         <BugFilter filterBy={filterBy} onSetFilterBy={onSetFilterBy} />
+        
         <header>
             <h3>Bug List</h3>
             <section className="btn-container">
-                <button onClick={onSaveBug}>
-                    <i className="fa-solid fa-plus"></i>
-                </button>
+                <button onClick={onSaveBug}><i className="fa-solid fa-plus"></i></button>
                 {/* <button>
                     <a href='/api/bug/bugs-pdf'>
                         <i className="fa-solid fa-download"></i>
                     </a>
                 </button> */}
-                <button onClick={onDownloadBugs}>
-                    <i className="fa-solid fa-download"></i>
-                </button>
-
-                <button onClick={() => onSetSort("severity")}>
-                    <i className={`fa-solid ${sortBy.sortField === "severity"
-                        ? (sortBy.sortDir !== 1
-                            ? "fa-arrow-up-1-9"
-                            : "fa-arrow-down-1-9")
-                        : "fa-arrow-up-1-9"}`}></i>
-                </button>
-
-                <button onClick={() => onSetSort("title")}>
-                    <i className={`fa-solid ${sortBy.sortField === "title"
-                        ? (sortBy.sortDir !== 1
-                            ? "fa-arrow-up-a-z"
-                            : "fa-arrow-down-a-z")
-                        : "fa-arrow-up-a-z"}`}></i>
-                </button>
-
+                <button onClick={onDownloadBugs}><i className="fa-solid fa-download"></i></button>
+                <button onClick={() => onSetSort("severity")}><i className={`fa-solid ${getSortIcon("severity", sortBy)}`}></i></button>
+                <button onClick={() => onSetSort("title")}><i className={`fa-solid ${getSortIcon("title", sortBy)}`}></i></button>
 
             </section>
         </header>
 
-        <BugList
-            bugs={bugs}
-            onRemoveBug={onRemoveBug}
-            onEditBug={onEditBug}
-            sortBy={sortBy}
-        />
+        <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} sortBy={sortBy}/>
 
         <section className="btn-pagination">
             <button onClick={prevPage} disabled={pagination.pageIdx === 0}>Prev</button>

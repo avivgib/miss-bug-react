@@ -18,7 +18,7 @@ export function App() {
     return <Router>
         <div className="app-wrapper">
             <UserMsg />
-            <AppHeader />
+            <AppHeader loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
             <main className="container">
                 <Routes>
                     <Route path="/" element={<Home />} />
