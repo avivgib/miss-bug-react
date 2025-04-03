@@ -3,6 +3,15 @@
 }
 
 .home-page h2 {
-    margin-block-start: 3.5em;
+    margin-block-start: 2.5em;
     font-size: 3em;
+}
+
+.home-page img {
+    max-width: min(30vw, 800px);
+    max-height: min(30vh, 800px);
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin: 20px 0 30px;
+    object-fit: cover;
 }
