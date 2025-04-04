@@ -2,15 +2,34 @@
     --bg1: darkcyan;
     --bg2: rgb(50, 165, 204);
     --bg3: darkmagenta;
+    --bg4: midnightblue;
+    --bg5: darkslategray;
     
     --color1: aliceblue;
     --color2: lightblue;
     --color3: gold;
     --color4: goldenrod;
+    --color5: coral;
+    --color6: tomato;
     
     --gray1: #444;
     --gray2: lightgray;
+    --gray3: #222;
+    --gray4: #888;
     
     --success: green;
+    --success-light: lightgreen;
+    --success-dark: darkgreen;
+
     --danger: orangered;
+    --danger-light: salmon;
+    --danger-dark: darkred;
+
+    --warning: orange;
+    --warning-light: #ffcc80;
+    --warning-dark: #cc7000;
+    
+    --info: deepskyblue;
+    --info-light: #90e0ff;
+    --info-dark: #0077b6;
 }
