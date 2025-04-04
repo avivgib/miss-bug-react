@@ -10,7 +10,7 @@ export const userService = {
     getById,
     getByUsername,
     remove,
-    add
+    signup
 }
 
 function query() {
@@ -37,22 +37,26 @@ function remove(userId) {
     return _saveUsersToFile()
 }
 
-function add(user) {
-    return getByUsername(user.username)
-        .then(existingUser => {
-            if (existingUser) return Promise.reject('Username taken')
+function signup({ fullname, username, password }) {
+    if (!fullname || !username || !password) {
+        return Promise.reject('Incomplete credentials')
+    }
 
-            user._id = utilService.makeId()
-            user.password = cryptr.encrypt(user.password)
-            users.push(user)
+    const user = {
+        _id: utilService.makeId(),
+        fullname,
+        username,
+        password,
+        isAdmin: false
+    }
+    users.push(user)
 
-            return _saveUsersToFile()
-                .then(() => {
-                    user = { ...user }
-                    delete user.password
-                    return user
-                })
-        })
+    return _saveUsersToFile()
+        .then(() => ({
+            _id: user._id,
+            fullname: user.fullname,
+            isAdmin: user.isAdmin
+        }))
 }
 
 function _saveUsersToFile() {

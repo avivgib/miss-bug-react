@@ -19,6 +19,7 @@ app.get('/api/bug/bugs-pdf', (req, res) => {
     bugService.generateBugsPdf(res)
 })
 
+//  --------------------- REST API for Bugs --------------------- 
 // Fetch all bugs
 app.get('/api/bug', (req, res) => {
     bugService.query(req.query)
@@ -141,43 +142,7 @@ app.delete('/api/bug/:bugId', (req, res) => {
         })
 })
 
-// Auth API
-app.post('/api/auth/signup', (req, res) => {
-    const credentials = req.body
-
-    userService.add(credentials)
-        .then(user => {
-            if (user) {
-                const loginToken = authService.getLoginToken(user)
-                res.cookie('loginToken', loginToken)
-                res.send(user)
-            } else {
-                res.status(400).send('Cannot signup')
-            }
-        })
-        .catch(err => res.status(404).send(`Username Taken - ${err}`))
-})
-
-app.post('/api/auth/login', (req, res) => {
-    const credentials = req.body
-    // console.log(`credentials: ${JSON.stringify(credentials)}`)
-
-    authService.checkLogin(credentials)
-        .then(user => {
-            const loginToken = authService.getLoginToken(user)
-            res.cookie('loginToken', loginToken)
-            res.send(user)
-        })
-        .catch(() => res.status(404).send('Invalid Credentials'))
-})
-
-app.get('/api/auth/logout', (req, res) => {
-    res.clearCookie('loginToken')
-    res.send('logged-out')
-})
-
-
-// Admin Options
+// --------------------- User API ---------------------
 // Fetch all users
 app.get('/api/user', (req, res) => {
     userService.query()
@@ -202,12 +167,56 @@ app.get('/api/user/:userId', (req, res) => {
 // Delete user
 app.delete('/api/user/:userId', (req, res) => {
     const { userId } = req.params
+
+    // Add bugService.hasBugs() here to check if there are any bugs for this user
+
     userService.remove(userId)
         .then(() => res.send({ msg: 'User deleted' }))
         .catch(err => {
             loggerService.error('Failed to delete user', err)
             res.status(500).send('Cannot delete user')
         })
+})
+
+// --------------------- Auth API ---------------------
+// SIGNUP
+app.post('/api/auth/signup', (req, res) => {
+    const credentials = req.body
+
+    userService.signup(credentials)
+        .then(user => {
+            const loginToken = authService.getLoginToken(user)
+            res.cookie('loginToken', loginToken)
+            res.send(user)
+        })
+        .catch(err => {
+            loggerService.error('Cannot signup', err)
+            res.status(404).send('Cannot signup')
+        })
+})
+
+// LOGIN
+app.post('/api/auth/login', (req, res) => {
+    const credentials = {
+        username: req.body.username,
+        password: req.body.password
+    }
+    authService.checkLogin(credentials)
+        .then(user => {
+            const loginToken = authService.getLoginToken(user)
+            res.cookie('loginToken', loginToken)
+            res.send(user)
+        })
+        .catch(() => {
+            loggerService.error('Cannot login', err)
+            res.status(404).send('Cannot login')
+        })
+})
+
+// LOGOUT
+app.get('/api/auth/logout', (req, res) => {
+    res.clearCookie('loginToken')
+    res.send('logged-out')
 })
 
 
