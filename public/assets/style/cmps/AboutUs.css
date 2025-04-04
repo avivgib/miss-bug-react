@@ -11,7 +11,7 @@
 .about-us h2 {
     font-size: 2.5rem;
     margin-block-end: 50px;
-    color: var(--color2);
+    color: var(--gray4);
 }
 
 .about-us .content {
@@ -34,5 +34,6 @@
     border-radius: 50%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin: 20px 0 30px;
+    background-color: var(--color1);
     object-fit: cover;
 }
