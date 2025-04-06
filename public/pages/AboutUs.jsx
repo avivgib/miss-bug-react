@@ -10,7 +10,7 @@ export function AboutUs() {
                 Alias unde hic quisquam doloremque.
             </p>
 
-            <img src="assets/images/miss-bug.png" alt="" />
+            <img src="assets/images/bug_logo.png" alt="" />
         </span>
     </section>
 }

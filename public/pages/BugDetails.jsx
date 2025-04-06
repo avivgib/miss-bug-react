@@ -26,6 +26,7 @@ export function BugDetails() {
             bug && 
             <div>
                 <h4>{bug.title}</h4>
+                <img src={bug.img} />
                 <h5>Severity: <span>{bug.severity}</span></h5>
                 <p>Description: <span>{bug.description}</span></p>
             </div>
