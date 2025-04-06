@@ -15,10 +15,10 @@ export function AppHeader({ loggedInUser, setLoggedInUser }) {
         <h1>Miss Bug</h1>
         <nav>
             <NavLink to="/">Home</NavLink>
-            <NavLink to="/bug">Bugs</NavLink>
-            <NavLink to="/about">About</NavLink>
             {loggedInUser ? (
                 <section className="user-info">
+                    <NavLink to="/bug">Bugs</NavLink>
+                    <NavLink to="/about">About</NavLink>
                     <span>Welcome, {loggedInUser.fullname}</span>
                     <button onClick={onLogout}>Logout</button>
                 </section>
