@@ -1,60 +1,5 @@
 [
     {
-        "_id": "kPtP3",
-        "title": "New Bug5",
-        "description": "Bug5 details...",
-        "severity": "high5",
-        "createdAt": 1743544366425,
-        "creator": {
-            "_id": "u102",
-            "fullname": "Loka Ma"
-        }
-    },
-    {
-        "_id": "vxVTs",
-        "title": "New Bug3",
-        "description": "Bug3 details...",
-        "severity": "high3",
-        "createdAt": 1743544348877,
-        "creator": {
-            "_id": "u102",
-            "fullname": "Loka Ma"
-        }
-    },
-    {
-        "_id": "L6OVy",
-        "title": "New Bug2",
-        "description": "Bug2 details...",
-        "severity": "high2",
-        "createdAt": 1743544213167,
-        "creator": {
-            "_id": "u102",
-            "fullname": "Loka Ma"
-        }
-    },
-    {
-        "_id": "JpuhZ",
-        "title": "New Bug2",
-        "description": "Bug2 details...",
-        "severity": "high2",
-        "createdAt": 1743544083759,
-        "creator": {
-            "_id": "u102",
-            "fullname": "Loka Ma"
-        }
-    },
-    {
-        "_id": "PCy5u",
-        "title": "New Bug",
-        "description": "Bug details...",
-        "severity": "high",
-        "createdAt": 1743544019650,
-        "creator": {
-            "_id": "u102",
-            "fullname": "Loka Ma"
-        }
-    },
-    {
         "_id": "abc123",
         "title": "Cannot save a new car",
         "description": "Problem when clicking Save",
@@ -67,7 +12,8 @@
         "creator": {
             "_id": "u101",
             "fullname": "Pako Ja"
-        }
+        },
+        "img": "/assets/images/bug_1.png"
     },
     {
         "_id": "def456",
@@ -82,7 +28,8 @@
         "creator": {
             "_id": "u102",
             "fullname": "Loka Ma"
-        }
+        },
+        "img": "/assets/images/bug_2.png"
     },
     {
         "_id": "ghi789",
@@ -97,7 +44,8 @@
         "creator": {
             "_id": "u103",
             "fullname": "Mike Rofon"
-        }
+        },
+        "img": "/assets/images/bug_3.png"
     },
     {
         "_id": "jkl012",
@@ -111,7 +59,8 @@
         "creator": {
             "_id": "u104",
             "fullname": "Sara Lee"
-        }
+        },
+        "img": "/assets/images/bug_4.png"
     },
     {
         "_id": "mno345",
@@ -126,7 +75,8 @@
         "creator": {
             "_id": "u105",
             "fullname": "John Smith"
-        }
+        },
+        "img": "/assets/images/bug_5.png"
     },
     {
         "_id": "pqr678",
@@ -142,7 +92,8 @@
         "creator": {
             "_id": "u106",
             "fullname": "Alex Brown"
-        }
+        },
+        "img": "/assets/images/bug_6.png"
     },
     {
         "_id": "stu901",
@@ -157,7 +108,8 @@
         "creator": {
             "_id": "u107",
             "fullname": "Emily White"
-        }
+        },
+        "img": "/assets/images/bug_7.png"
     },
     {
         "_id": "vwx234",
@@ -172,7 +124,8 @@
         "creator": {
             "_id": "u108",
             "fullname": "David Green"
-        }
+        },
+        "img": "/assets/images/bug_8.png"
     },
     {
         "_id": "yzx567",
@@ -187,6 +140,7 @@
         "creator": {
             "_id": "u109",
             "fullname": "Jessica Black"
-        }
+        },
+        "img": "/assets/images/bug_9.png"
     }
 ]

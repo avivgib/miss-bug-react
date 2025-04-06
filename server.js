@@ -22,6 +22,7 @@ app.get('/api/bug/bugs-pdf', (req, res) => {
 //  --------------------- REST API for Bugs --------------------- 
 // Fetch all bugs
 app.get('/api/bug', (req, res) => {
+    console.log(`req.query: ${req.query}`)
     bugService.query(req.query)
         .then(({ bugs, total }) => {
             loggerService.info(`Fetched ${bugs.length} bugs, total: ${total}`)
