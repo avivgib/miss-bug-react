@@ -10,9 +10,9 @@ export const authService = {
 }
 
 function login({ username, password }) {
-    return axios.get(BASE_URL + 'login', { username, password })
+    return axios.post(BASE_URL + 'login', { username, password })
         .then(res => res.data)
-        .then(_setLeggedInUser)
+        .then(_setLoggedInUser)
 }
 
 function signup({ username, password, fullname }) {

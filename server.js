@@ -208,9 +208,9 @@ app.post('/api/auth/login', (req, res) => {
             res.cookie('loginToken', loginToken)
             res.send(user)
         })
-        .catch(() => {
+        .catch(err => {
             loggerService.error('Cannot login', err)
-            res.status(404).send('Cannot login')
+            res.status(401).send('Cannot login')
         })
 })
 
